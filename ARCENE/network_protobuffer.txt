@@ -1,0 +1,205 @@
+name: "ArceneNet"
+layer {
+  name: "arcene dataset"
+  type: "Data"
+  data_param {
+    source: "mnist_train_lmdb"
+    backend: LMDB
+    batch_size: 64
+  }
+  top: "data"
+  top: "label"
+}
+
+layer {
+  name: "convolutional 1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "data"
+  top: "conv1"
+}
+
+layer {
+  name: "pool 1"
+  type: "Pooling"
+  pooling_param {
+    kernel_size: 2
+    stride: 2
+    pool: MAX
+  }
+  bottom: "conv1"
+  top: "pool1"
+}
+
+layer {
+  name: "convolutional 2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "pool1"
+  top: "conv2"
+}
+
+layer {
+  name: "pool 2"
+  type: "Pooling"
+  pooling_param {
+    kernel_size: 2
+    stride: 2
+    pool: MAX
+  }
+  bottom: "conv2"
+  top: "pool2"
+}
+
+layer {
+  name: "convolutional 3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "pool2"
+  top: "conv3"
+}
+
+layer {
+  name: "pool 3"
+  type: "Pooling"
+  pooling_param {
+    kernel_size: 2
+    stride: 2
+    pool: MAX
+  }
+  bottom: "conv3"
+  top: "pool3"
+}
+
+layer {
+  name: "convolutional 4"
+  type: "Convolution"
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "pool3"
+  top: "conv4"
+}
+
+layer {
+  name: "pool 4"
+  type: "Pooling"
+  pooling_param {
+    kernel_size: 2
+    stride: 2
+    pool: MAX
+  }
+  bottom: "conv4"
+  top: "pool4"
+}
+
+layer {
+  name: "convolutional 5"
+  type: "Convolution"
+  convolution_param {
+    num_output: 16
+    kernel_size: 5
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "pool4"
+  top: "conv5"
+}
+
+layer {
+  name: "pool 5"
+  type: "Pooling"
+  pooling_param {
+    kernel_size: 2
+    stride: 2
+    pool: MAX
+  }
+  bottom: "conv5"
+  top: "pool5"
+}
+
+layer {
+  name: "fully connected 1"
+  type: "InnerProduct"
+  param { lr_mult: 1 }
+  param { lr_mult: 2 }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "pool5"
+  top: "ip1"
+}
+
+layer {
+  name: "fully connected 2"
+  type: "InnerProduct"
+  param { lr_mult: 1 }
+  param { lr_mult: 2 }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  bottom: "ip1"
+  top: "ip2"
+}
+
+layer {
+  name: "loss function"
+  type: "SoftmaxWithLoss"
+  bottom: "ip2"
+  bottom: "label"
+}
